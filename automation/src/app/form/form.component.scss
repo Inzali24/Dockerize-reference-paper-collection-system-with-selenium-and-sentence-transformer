@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  mat-card{
+    width: 300px;
+    height: 250px;
+  }
+  mat-form-field{
+    width: 290px;
+  }
+
+  .center-button {
+    display: block;
+    margin-left: 120px;
+  }
+
+  .file-upload {
+    display: flex;
+    align-items: center;
+  }
+  
+  .file-upload input[type="file"] {
+    display: none;
+  }
+  
