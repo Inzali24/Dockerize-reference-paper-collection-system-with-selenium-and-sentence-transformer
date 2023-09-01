@@ -18,8 +18,10 @@ def getThesisList():
     else:
          #keywords = request.form.get('keywords')
          keywords = request.args.get("keywords")
-         gg = testpdf.RunAutomation(keywords)
-         return gg
+         title = request.args.get("title")
+         print(title)
+         data = testpdf.RunAutomation(title,keywords)
+         return data
 
 if __name__ == "__main__":
     app.run(host="127.0.0.9", port=8080, debug=True)

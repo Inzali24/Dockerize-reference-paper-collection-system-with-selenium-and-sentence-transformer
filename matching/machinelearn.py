@@ -41,7 +41,6 @@ def getlist(url,keyword):
     else:
       paragraph = "No matching paragraph found."
   
-
   paragraph = ''.join(paragraph)
   print(paragraph)
   # Remove the word "keyword" (case-insensitive)
@@ -62,4 +61,6 @@ def getlist(url,keyword):
   cosine_scores =util.cos_sim(embedding_1, embedding_2)
   #Output the pairs with their score
   print("{} \t\t {} \t\t Score: {:.4f}".format(sentences1[0], sentences2[0], cosine_scores[0][0]))
-  return cosine_scores[0][0].item()
+  similarity = cosine_scores[0][0].item()
+  percentageSim = "{:.2}".format(similarity)  
+  return percentageSim

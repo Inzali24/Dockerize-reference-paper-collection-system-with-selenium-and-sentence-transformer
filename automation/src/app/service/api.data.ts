@@ -3,4 +3,5 @@ export interface AutomationData {
     title: string;
     similarity: number;
     url: string;
+    citations: number;
 };

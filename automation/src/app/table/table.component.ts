@@ -14,20 +14,24 @@ import { AutomationData } from '../service/api.data';
 })
 export class TableComponent implements OnInit  {
   dataSource = new MatTableDataSource<AutomationData>();
+  dataList: AutomationData[]=[];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  displayedColumns: string[] = ['No','title', 'similarity', 'icon'];
+  displayedColumns: string[] = ['No','title', 'similarity','citations', 'icon'];
   constructor(    
     private apiService:ApiService,
     ){}
 
-  ngOnInit() {  
-    this.apiService.getData('python ')
+  async ngOnInit() {  
+    const keyword:string[] = this.apiService.getKeyword();
+    await this.apiService.getData(keyword)
       .subscribe(
         (data: AutomationData[]) => {
           // This block of code will be executed when data is emitted by the observable
-          console.log(data);
+         
           this.dataSource = new MatTableDataSource<AutomationData>(data);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
           // Handle the 'data' here as needed
         },
         (error) => {
@@ -35,12 +39,18 @@ export class TableComponent implements OnInit  {
           console.error(error);
         }
       );
+   //this.setTableData();
+  }
+
+  setTableData(){
+    console.log(this.dataList);
+    this.dataSource = new MatTableDataSource<AutomationData>(this.dataList);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
   onOpenClick(data:any):void{
-    console.log(data);
-
+    const newTabUrl = `javascript:void(0);window.open('${data}', '_blank');`;
+    window.location.href = newTabUrl;
   }
 }

@@ -1,6 +1,6 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef,OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { Router } from '@angular/router';
 import { getDocument,GlobalWorkerOptions  } from 'pdfjs-dist';
 import { ApiService } from'../service/api.service';
 
@@ -9,7 +9,7 @@ import { ApiService } from'../service/api.service';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent {
+export class FormComponent implements OnInit  {
   formGroup: FormGroup;
   uploading = false;
   selectedFileName: string = '';
@@ -20,12 +20,18 @@ export class FormComponent {
   constructor(
     private formBuilder: FormBuilder,
     private apiService:ApiService,
+    private router: Router
     ) {
     this.formGroup = this.formBuilder.group({
       title: ['', Validators.required],
       keywords: ['', Validators.required],
     });
   }
+
+  ngOnInit() {
+    this.apiService.clearKeyword();
+  }
+
   handleFileInput(event: any): void {
     const file = event.target.files[0];
     console.log('Uploaded file:', file);
@@ -68,19 +74,13 @@ export class FormComponent {
       return;      
     }
     this.uploading = true;
+  
     const keywords=this.formGroup.get('keywords');
+    const title = this.formGroup.get('title');
     console.log(keywords?.value);
-    // // Perform form submission or API call    
-    // let responseData;
-    // this.apiService.getData(keywords?.value).subscribe(
-    //   (data) => {
-    //     responseData = data;
-    //   },
-    //   (error) => {
-    //     console.error('Error fetching data:', error);
-    //   }
-    // );
-    // console.log(responseData);
+    this.apiService.setKeyword(title?.value);
+    this.apiService.setKeyword(keywords?.value);
+    this.router.navigate(['/result']);
   }
 
   openFileInput(): void {

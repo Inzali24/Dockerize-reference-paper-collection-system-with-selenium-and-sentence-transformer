@@ -1,12 +1,18 @@
 table {
     width: 100%;
-    margin-top: 100px;
+    margin-top: 30px;
+    margin-left: 20px;
   }
+
   .mat-mdc-form-field {
     font-size: 14px;
     width: 100%;
   }
+  
   .example-spacer {
     flex: 1 1 auto;
   }
-  
+
+  .title{
+    margin-left: 10px;
+  }

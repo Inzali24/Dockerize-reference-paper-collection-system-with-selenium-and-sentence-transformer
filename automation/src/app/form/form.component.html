@@ -24,12 +24,10 @@
             </button>
           </div>
           <br>
-          <div class="center-button">
-            <a routerLink="/result">
+          <div class="center-button">            
             <button mat-raised-button color="warn" type="submit " [disabled]="!formGroup.valid || uploading" >
               Submit
-            </button>
-            </a>
+            </button>           
           </div>
           <input type="file" (change)="handleFileInput($event)" accept=".pdf" hidden #fileInput>
         </form>
