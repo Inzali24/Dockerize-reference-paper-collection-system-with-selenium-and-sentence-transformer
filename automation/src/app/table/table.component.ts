@@ -28,7 +28,10 @@ export class TableComponent implements OnInit  {
       .subscribe(
         (data: AutomationData[]) => {
           // This block of code will be executed when data is emitted by the observable
-         
+          data.forEach((item, index) => {
+            item['No'] = index + 1;
+          });
+          
           this.dataSource = new MatTableDataSource<AutomationData>(data);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;

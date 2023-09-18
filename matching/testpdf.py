@@ -3,10 +3,13 @@ import machinelearn
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def RunAutomation(title, keywords): 
- driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\matching\\chromedriver.exe')
+ driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\Downloads\\chromedriver-win32\\chromedriver-win32\\chromedriver.exe')
+ #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\matching\\chromedriver.exe')
  driver.get('https://scholar.google.com/') 
  search_box = driver.find_element(By.NAME, "q")
  #search_box.send_keys('selenium webdriver')
@@ -16,34 +19,57 @@ def RunAutomation(title, keywords):
  i=1
 # div = driver.find_element(By.ID,"gs_nml")
 # for a_element in div.find_elements(By.TAG_NAME,'a'):
- index=0;
- while(i<11):
-   for div_element in driver.find_elements(By.CLASS_NAME,"gs_ri"):
-     # Assuming the element with the "cites" information is the only one with an "a" tag in the page
-    #  element = div_element.find_element(By.XPATH, "//a[contains(@href, 'cites=')]")
-     # Extract the number from the "Cited by" text and convert it to an integer
-    #  citations = int(element.text.split()[-1])
-    #  print(f"Cited by: {citations}")
-     citations=0
-     pdf_spans = div_element.find_elements(By.XPATH,'.//span[contains(text(), "[PDF]")]')
-     if pdf_spans:
-      try:
-        # Find the nested a tag containing "cites=" info
-        citation_a = div_element.find_element(By.XPATH, ".//a[contains(@href, 'cites=')]")
-        # Extract the number from the "Cited by" text and convert it to an integer
+ while(i<4):
+   # Find all the relevant div elements
+  div_elements = driver.find_elements(By.CLASS_NAME, "gs_r.gs_or.gs_scl")
+
+  pdf_links = []
+  citations = []
+  title = []
+  for div_element in div_elements:
+    # Check if there are any [PDF] spans within gs_ri
+    gs_ri = div_element.find_element(By.CLASS_NAME, "gs_ri")
+    pdf_spans_gs_ri = gs_ri.find_elements(By.XPATH, './/span[contains(text(), "[PDF]")]')
+    
+    if pdf_spans_gs_ri:
+      try:        
+        pdf_link =div_element.find_element(By.PARTIAL_LINK_TEXT, "PDF").get_attribute("href")
+        title = gs_ri.find_element(By.TAG_NAME, "a").text
+        citation_a = gs_ri.find_element(By.XPATH, ".//a[contains(@href, 'cites=')]")
         citations = int(citation_a.text.split()[-1])
         print(f"Cited by: {citations}")
-      except NoSuchElementException:
-        print("No 'cites' info found for this element.")      
-      a_element = div_element.find_element(By.TAG_NAME,'a')     
-      title = a_element.text
-      url = a_element.get_attribute("href")
-      similarity = machinelearn.getlist(url,keywords)
-      index=index+1
-      lst.append({'No':index,'title':title,'url':url,'similarity': similarity,'citations':citations})
-      # if similarity is not None:         
-   i=i+1
-   driver.find_element(By.LINK_TEXT,str(i)).click()
- driver.quit() 
-#  lst.sort(key=lambda x: x['similarity'], reverse=True)
- return lst;
+        pdf_links.append({"title": title, "pdf_link": pdf_link, "citations": citations})                    
+      except Exception as e:
+         print("Element not found:", e)
+    else:
+        try:
+          gs_ggsd = WebDriverWait(div_element, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "gs_ggsd")))
+          pdf_spans_gs_ggsd = gs_ggsd.find_elements(By.XPATH, './/span[contains(text(), "[PDF]")]')        
+          if pdf_spans_gs_ggsd:
+            pdf_link = gs_ggsd.find_element(By.PARTIAL_LINK_TEXT, "PDF").get_attribute("href")
+            title = gs_ri.find_element(By.TAG_NAME, "a").text
+            citation_a = gs_ri.find_element(By.XPATH, ".//a[contains(@href, 'cites=')]")
+            citations = int(citation_a.text.split()[-1])
+            print(f"Cited by: {citations}")
+            pdf_links.append({"title": title, "pdf_link": pdf_link, "citations": citations}) 
+        except Exception as e:
+         print("Element not found:", e)
+    
+  # If gs_ri or gs_ggsd has PDF, print the titles and PDF links
+  if pdf_links:
+     print("PDF links found:")
+     for item in pdf_links:
+        print("Title:", item["title"])
+        print("PDF Link:", item["pdf_link"])
+        print("citations:", item["citations"])
+        similarity = machinelearn.getlist(item["pdf_link"],keywords)
+        if similarity != '':        
+         lst.append({'title':item["title"],'url':item["pdf_link"],'similarity': float(similarity)*100,'citations':item["citations"]})
+  else:
+      print("No PDF links found.")
+  i = i + 1
+  driver.find_element(By.LINK_TEXT,str(i)).click()
+ driver.quit()
+ print(lst)
+ sorted_data = sorted(lst,  key=lambda x: x["similarity"], reverse=True)
+ return sorted_data;

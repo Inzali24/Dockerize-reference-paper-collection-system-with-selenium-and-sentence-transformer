@@ -21,7 +21,9 @@
       <!-- Weight Column -->
       <ng-container matColumnDef="similarity">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Keyword similarity </th>
-        <td mat-cell *matCellDef="let element"> {{element.similarity}} </td>
+        <td mat-cell *matCellDef="let element"> 
+          <ng-container *ngIf="element.similarity !=''; else noSimilarity">{{element.similarity}}%</ng-container>
+          <ng-template #noSimilarity></ng-template></td>
       </ng-container>
       <ng-container matColumnDef="citations">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Citated By </th>
