@@ -5,11 +5,18 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.webdriver.chrome.service import Service
 
 def RunAutomation(title, keywords): 
- driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\Downloads\\chromedriver-win32\\chromedriver-win32\\chromedriver.exe')
+ #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\Downloads\\chromedriver-win32\\chromedriver-win32\\chromedriver.exe')
  #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\matching\\chromedriver.exe')
+ service = Service(executable_path=r'/usr/local/bin/chromedriver') 
+ op = webdriver.ChromeOptions()
+ # add option
+ op.add_argument('--headless')
+ op.add_argument('--no-sandbox')
+ op.add_argument("--disable-setuid-sandbox") 
+ driver = webdriver.Chrome(service=service, options=op)
  driver.get('https://scholar.google.com/') 
  search_box = driver.find_element(By.NAME, "q")
  #search_box.send_keys('selenium webdriver')

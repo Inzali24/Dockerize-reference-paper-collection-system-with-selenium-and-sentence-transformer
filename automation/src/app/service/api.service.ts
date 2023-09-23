@@ -9,7 +9,7 @@ import { Observable , of } from 'rxjs';
 export class ApiService {
 
   formData: string[]=[];
-  private apiUrl = 'http://127.0.0.9:8080'; // Replace with your Flask API URL
+  private apiUrl = 'http://127.0.0.1:8080'; // Replace with your Flask API URL
 
   constructor(private http: HttpClient) {}
 
