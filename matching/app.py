@@ -24,4 +24,5 @@ def getThesisList():
          return data
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True) # port for docker
+    #app.run(host="127.0.0.9", port=8080, debug=True) # port for local

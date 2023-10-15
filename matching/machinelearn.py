@@ -2,6 +2,7 @@ import io
 import requests
 from PyPDF2 import PdfReader
 import re
+import urllib3
 from sentence_transformers import SentenceTransformer, util
 url = 'https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=65e283a565b98fc8d3e6aa4069f13ea32dda9a03'
 words = ''
@@ -9,7 +10,7 @@ words = ''
 def getlist(url,keyword):
   r = requests.get(url,verify=False)
   response = requests.head(url)
-
+  urllib3.disable_warnings()
   # Check if the Content-Type header indicates a PDF
   content_type = response.headers.get("Content-Type", "")
   is_pdf = content_type.lower().startswith("application/pdf")

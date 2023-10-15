@@ -6,16 +6,16 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
-
 def RunAutomation(title, keywords): 
- #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\Downloads\\chromedriver-win32\\chromedriver-win32\\chromedriver.exe')
+ 
  #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\matching\\chromedriver.exe')
  service = Service(executable_path=r'/usr/local/bin/chromedriver') 
  op = webdriver.ChromeOptions()
- # add option
+ #add option
  op.add_argument('--headless')
  op.add_argument('--no-sandbox')
  op.add_argument("--disable-setuid-sandbox") 
+ #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\Downloads\\chromedriver-win32\\chromedriver-win32\\chromedriver.exe')
  driver = webdriver.Chrome(service=service, options=op)
  driver.get('https://scholar.google.com/') 
  search_box = driver.find_element(By.NAME, "q")
@@ -26,7 +26,7 @@ def RunAutomation(title, keywords):
  i=1
 # div = driver.find_element(By.ID,"gs_nml")
 # for a_element in div.find_elements(By.TAG_NAME,'a'):
- while(i<4):
+ while(i<11):
    # Find all the relevant div elements
   div_elements = driver.find_elements(By.CLASS_NAME, "gs_r.gs_or.gs_scl")
 
