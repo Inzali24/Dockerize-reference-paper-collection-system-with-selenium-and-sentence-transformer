@@ -9,14 +9,15 @@ from selenium.webdriver.chrome.service import Service
 def RunAutomation(title, keywords): 
  
  #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\matching\\chromedriver.exe')
- service = Service(executable_path=r'/usr/local/bin/chromedriver') 
+ #service = Service(executable_path=r'/usr/local/bin/chromedriver') 
  op = webdriver.ChromeOptions()
  #add option
  op.add_argument('--headless')
  op.add_argument('--no-sandbox')
  op.add_argument("--disable-setuid-sandbox") 
- #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\Downloads\\chromedriver-win32\\chromedriver-win32\\chromedriver.exe')
- driver = webdriver.Chrome(service=service, options=op)
+ driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe')
+ driver = webdriver.Chrome(options=op)
+    
  driver.get('https://scholar.google.com/') 
  search_box = driver.find_element(By.NAME, "q")
  #search_box.send_keys('selenium webdriver')
@@ -47,7 +48,7 @@ def RunAutomation(title, keywords):
         print(f"Cited by: {citations}")
         pdf_links.append({"title": title, "pdf_link": pdf_link, "citations": citations})                    
       except Exception as e:
-         print("Element not found:", e)
+         print("Element1 not found:", e)
     else:
         try:
           gs_ggsd = WebDriverWait(div_element, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "gs_ggsd")))
@@ -60,7 +61,7 @@ def RunAutomation(title, keywords):
             print(f"Cited by: {citations}")
             pdf_links.append({"title": title, "pdf_link": pdf_link, "citations": citations}) 
         except Exception as e:
-         print("Element not found:", e)
+         print("Element2 not found:", e)
     
   # If gs_ri or gs_ggsd has PDF, print the titles and PDF links
   if pdf_links:

@@ -1,0 +1,18 @@
+/* error-dialog.component.css */
+.custom-title {
+    font-size: 24px;
+    color: #ff0000; /* Red color for the title */
+  }
+  
+  .custom-content {
+    font-size: 16px;
+    background-color: #f7f7f7; /* Light gray background for content */
+    padding: 16px;
+  }
+  
+  .custom-actions {
+    display: flex;
+    justify-content: flex-end; /* Right-align the actions */
+    padding: 16px;
+  }
+  

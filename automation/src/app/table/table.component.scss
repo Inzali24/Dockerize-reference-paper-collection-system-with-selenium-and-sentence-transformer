@@ -16,3 +16,11 @@ table {
   .title{
     margin-left: 10px;
   }
+  
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ensure it takes the full height of its parent */
+  }
+  

@@ -33,7 +33,7 @@ export class ApiService {
     const url = `${this.apiUrl}/getdata?keywords=${keywords[1]}&title=${keywords[0]}`;
     return this.http.get<AutomationData[]>(url)
       .pipe(
-        map((response: any) => {         
+        map((response: any) => {    
           return response as AutomationData[];
         })
       );

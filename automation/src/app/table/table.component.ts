@@ -3,7 +3,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort } from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { ApiService } from'../service/api.service';
+import { SpinnerService } from '../service/spinner.service';
 import { AutomationData } from '../service/api.data';
+import { DialogService } from '../service/dialog.service';
 /**
  * @title Data table with sorting, pagination, and filtering.
  */
@@ -20,10 +22,13 @@ export class TableComponent implements OnInit  {
   displayedColumns: string[] = ['No','title', 'similarity','citations', 'icon'];
   constructor(    
     private apiService:ApiService,
+    public spinnerService:SpinnerService,
+    private dialogService:DialogService
     ){}
 
   async ngOnInit() {  
     const keyword:string[] = this.apiService.getKeyword();
+    this.spinnerService.show();
     await this.apiService.getData(keyword)
       .subscribe(
         (data: AutomationData[]) => {
@@ -35,11 +40,15 @@ export class TableComponent implements OnInit  {
           this.dataSource = new MatTableDataSource<AutomationData>(data);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
+          this.spinnerService.hide();
           // Handle the 'data' here as needed
         },
         (error) => {
           // Handle errors here if any
-          console.error(error);
+          this.spinnerService.hide();
+          //this.dialogService.openErrorDialog(JSON.stringify(error));
+          this.dialogService.openErrorDialog('There is no search results');
+          console.error(JSON.stringify(error));
         }
       );
    //this.setTableData();

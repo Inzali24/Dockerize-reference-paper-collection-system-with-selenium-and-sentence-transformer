@@ -19,12 +19,16 @@ import { FormComponent } from './form/form.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
-    FormComponent
+    FormComponent,
+    ErrorDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +47,9 @@ import {MatInputModule} from '@angular/material/input';
     MatProgressBarModule,
     MatCardModule,
     MatInputModule,
-    HttpClientModule
+    HttpClientModule,
+    MatProgressSpinnerModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
