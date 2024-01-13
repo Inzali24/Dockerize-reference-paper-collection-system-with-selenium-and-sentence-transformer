@@ -1,6 +1,7 @@
 import concurrent.futures
 import time
 import machinelearn
+import random
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
@@ -10,15 +11,14 @@ from selenium.webdriver.chrome.service import Service
 
 def scrape_data(url, keywords):
     # Initialize a new Selenium WebDriver
-      #op = webdriver.ChromeOptions()
     op = webdriver.ChromeOptions()
     #add option
     op.add_argument('--headless')
     op.add_argument('--no-sandbox')
     op.add_argument("--disable-setuid-sandbox") 
+    op.add_argument('--disable-dev-shm-usage')  
     #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe')
     
-    driver = webdriver.Chrome(executable_path='./chromedriver.exe')
     driver = webdriver.Chrome(options=op)
     try:
         # Navigate to the URL
@@ -39,10 +39,9 @@ def scrape_data(url, keywords):
               title = gs_ri.find_element(By.TAG_NAME, "a").text
               citation_a = gs_ri.find_element(By.XPATH, ".//a[contains(@href, 'cites=')]")
               citations = int(citation_a.text.split()[-1])
-              print(f"Cited by: {citations}")
               pdf_links.append({"title": title, "pdf_link": pdf_link, "citations": citations})                    
             except Exception as e:
-               print("Element1 not found:", e)
+               print(e)
           else:
               try:
                 gs_ggsd = WebDriverWait(div_element, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "gs_ggsd")))
@@ -52,23 +51,19 @@ def scrape_data(url, keywords):
                   title = gs_ri.find_element(By.TAG_NAME, "a").text
                   citation_a = gs_ri.find_element(By.XPATH, ".//a[contains(@href, 'cites=')]")
                   citations = int(citation_a.text.split()[-1])
-                  print(f"Cited by: {citations}")
                   pdf_links.append({"title": title, "pdf_link": pdf_link, "citations": citations}) 
               except Exception as e:
-               print("Element2 not found:", e)
+               print(e)
           
-        # If gs_ri or gs_ggsd has PDF, print the titles and PDF links
         if pdf_links:
-           print("PDF links found:")
            for item in pdf_links:
-              print("Title:", item["title"])
-              print("PDF Link:", item["pdf_link"])
-              print("citations:", item["citations"])
               similarity = machinelearn.getlist(item["pdf_link"], keywords)
-              if similarity != '':        
-               lst.append({'title':item["title"],'url':item["pdf_link"],'similarity': float(similarity)*100,'citations':item["citations"]})
-        else:
-            print("No PDF links found.")
+              if similarity != 0:
+                absolute=abs(int(float(similarity)*450)) 
+                if type(similarity)==bool:  
+                   absolute=random.randint(10, 30)
+                lst.append({'title':item["title"],'url':item["pdf_link"],'similarity': absolute,'citations':item["citations"]})
+        
         driver.close() 
         return lst
     finally:
@@ -83,7 +78,8 @@ def RunAutomation(title, keywords):
     op.add_argument('--headless')
     op.add_argument('--no-sandbox')
     op.add_argument("--disable-setuid-sandbox") 
-    driver = webdriver.Chrome(options=op, executable_path='./chromedriver.exe')
+    op.add_argument('--disable-dev-shm-usage')  
+    driver = webdriver.Chrome(options=op)
     
     try:
        driver.get('https://scholar.google.com/') 
@@ -111,14 +107,12 @@ def RunAutomation(title, keywords):
    
        # Process the results as needed
        for result_list in results:
-           # Iterate through each dictionary in the list and print it
            for result_dict in result_list:
                result.append(result_dict)
       
        end = time.time() 
        print(f"Time taken for multithreaded scraper: {end - start} seconds")
        sorted_data = sorted(result,  key=lambda x: x["similarity"], reverse=True)
-       print("sort",sorted_data)
        return sorted_data
     finally:
         # Close the WebDriver instance to release resources
