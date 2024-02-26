@@ -29,6 +29,7 @@
 
 `docker build -t backend .`
 
+
 ### 5. See the Docker image                 
 
 **Windows/macOS/Linux**
