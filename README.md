@@ -48,7 +48,7 @@ You will see your image like this.
 `docker run -dp 4200:4200 frontend`
 `docker run -dp 5000:5000 backend`
 
-### 5. Run Docker image
+### 7. Test the system
 
 Now the system is running in port:4200 and you can access from browser via localhost:4200
 
