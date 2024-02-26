@@ -9,7 +9,7 @@ import { Observable , of } from 'rxjs';
 export class ApiService {
 
   formData: string[]=[];
-  private apiUrl = 'http://localhost:5000/'; // Replace with your Flask API URL for docker
+  private apiUrl = 'http://localhost:5001/'; // Replace with your Flask API URL for docker
   //private apiUrl = 'http://127.0.0.9:8080/'; // Replace with your Flask API URL for local
 
   constructor(private http: HttpClient) {}
