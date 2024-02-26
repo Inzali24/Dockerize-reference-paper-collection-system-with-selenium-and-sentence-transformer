@@ -19,12 +19,14 @@
 **Windows**
 
 `Change ```Dockerfile_for_windows``` to ```Dockerfile``` `
+
 `docker build -t backend .`
 
 
 **macOS/Linux**
 
 `Change ```Dockerfile_for_mac``` to ```Dockerfile``` `
+
 `docker build -t backend .`
 
 ### 5. See the Docker image                 
