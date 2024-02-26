@@ -5,12 +5,8 @@
 ### 1. Navigate to the frontend project directory
 `cd automation`
 ### 2. Docker Build using frontend DockerFile in project
-**Windows**
 
-`docker build -t frontend .`
-<br>
-
-**macOS/Linux**
+**Windows/macOS/Linux**
 
 `docker build -t frontend .`
 
@@ -22,20 +18,18 @@
 
 **Windows**
 
+`Change ```Dockerfile_for_windows``` to ```Dockerfile``` `
 `docker build -t backend .`
-<br>
+
 
 **macOS/Linux**
 
+`Change ```Dockerfile_for_mac``` to ```Dockerfile``` `
 `docker build -t backend .`
 
-### 5. See the Docker image          
+### 5. See the Docker image                 
 
-**Windows** 
-
-```docker images```          
-
-**macOS/Linux**
+**Windows/macOS/Linux**
 
 ```$docker images```
 
