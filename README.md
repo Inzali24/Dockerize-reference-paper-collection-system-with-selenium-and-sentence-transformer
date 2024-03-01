@@ -34,7 +34,7 @@
 
 **Windows/macOS/Linux**
 
-```$docker images```
+```docker images```
 
 You will see your image like this.
 
