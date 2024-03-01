@@ -46,6 +46,7 @@ You will see your image like this.
 ### 6. Run Docker image
 
 `docker run -dp 4200:4200 frontend`
+
 `docker run -dp 5001:5001 backend`
 
 ### 7. Test the system
