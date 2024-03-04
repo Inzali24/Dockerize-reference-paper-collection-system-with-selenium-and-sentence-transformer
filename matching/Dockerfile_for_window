@@ -9,7 +9,7 @@ RUN  apt-get update \
   && apt-get update && apt-get install -y gnupg2\
   && apt-get update && apt-get install -y curl unzip jq
 
-ARG CHROMEDRIVER_VERSION='117'
+ARG CHROMEDRIVER_VERSION='122'
 
 # Install Chrome WebDriver
 RUN CHROMEDRIVER_URL=$(curl -s https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json | \
