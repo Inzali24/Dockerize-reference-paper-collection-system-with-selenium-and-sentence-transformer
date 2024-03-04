@@ -91,7 +91,4 @@ export class FormComponent implements OnInit  {
     this.selectedFileName = '';
     this.fileInput.nativeElement.value = ''; // Clear the file input value
   }
-  onNavigate(){
-
-  }
 }
