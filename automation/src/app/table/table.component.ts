@@ -19,7 +19,7 @@ export class TableComponent implements OnInit  {
   dataList: AutomationData[]=[];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  displayedColumns: string[] = ['No','title', 'similarity','citations', 'icon'];
+  displayedColumns: string[] = ['No','title', 'similarity','citations', 'remark', 'icon'];
   constructor(    
     private apiService:ApiService,
     public spinnerService:SpinnerService,

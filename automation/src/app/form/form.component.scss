@@ -7,23 +7,19 @@
 
   mat-card{
     width: 300px;
-    height: 200px;
+    height: 250px;
   }
   mat-form-field{
     width: 290px;
   }
 
+  .example-full-width{
+    width: 290px;
+    height: 200px;
+  }
+
   .center-button {
     display: block;
     margin-left: 120px;
-  }
-
-  .file-upload {
-    display: flex;
-    align-items: center;
-  }
-  
-  .file-upload input[type="file"] {
-    display: none;
   }
   

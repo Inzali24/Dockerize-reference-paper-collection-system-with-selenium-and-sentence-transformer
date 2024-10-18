@@ -4,13 +4,13 @@
       <mat-card-content>
         <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
           <mat-form-field appearance="fill">
-            <mat-label>Thesis Title</mat-label>
-            <input matInput formControlName="title" placeholder="Enter text" required>
+            <mat-label>Search Query</mat-label>
+            <input matInput formControlName="title" placeholder="Selenium Webdriver" required>
           </mat-form-field>
           <br>
           <mat-form-field class="example-full-width">
-            <mat-label>Keywords in thesis</mat-label>
-            <textarea matInput formControlName="keywords" required placeholder="Selenium, Web Application etc..."></textarea>
+            <mat-label>Abstract in thesis</mat-label>
+            <textarea matInput formControlName="keywords" required placeholder="An abstract is a short summary of your (published or unpublished) research paper, usually about a paragraph (c. 6-7 sentences, 150-250 words) long."></textarea>
           </mat-form-field>
           <!-- <mat-form-field appearance="fill">
             <mat-label>PDF Upload</mat-label>

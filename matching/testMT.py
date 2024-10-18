@@ -3,22 +3,65 @@ import time
 import machinelearn
 import random
 from selenium import webdriver
+from selenium_stealth import stealth
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
+import logging
 
-def scrape_data(url, keywords):
+keyword_from_user =''
+def scrape_data(url):
     # Initialize a new Selenium WebDriver
+    global keyword_from_user
     op = webdriver.ChromeOptions()
     #add option
     op.add_argument('--headless')
+    op.add_argument('--disable-blink-features=AutomationControlled')
+    op.add_argument('--diable-popup-blocking')
+    op.add_argument('--start-maximized')
+    # disable extensions
+    op.add_argument('--disable-extensions')
     op.add_argument('--no-sandbox')
     op.add_argument("--disable-setuid-sandbox") 
     op.add_argument('--disable-dev-shm-usage')  
-    #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe')
+    driver = webdriver.Chrome(options=op)
     
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+    
+    user_agents = [
+    # Add your list of user agents here
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
+    ]
+
+    # select random user agent
+    user_agent = random.choice(user_agents)
+
+    # pass in selected user agent as an argument
+    op.add_argument(f'user-agent={user_agent}')
+    
+    # set user agent using execute_cpd_cmd
+    driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": user_agent})
+
+    #enable stealth mode
+    stealth(driver,
+            languages=["en-US", "en"],
+            vendor="Google Inc.",
+            platform="Win32",
+            webgl_vendor="Intel Inc.",
+            renderer="Intel Iris OpenGL Engine",
+            fix_hairline=True,
+           )
+
+    #driver = webdriver.Chrome(executable_path='C:\\Users\\Inzali Naing\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe')
+    logging.basicConfig(level=logging.INFO)
     driver = webdriver.Chrome(options=op)
     try:
         # Navigate to the URL
@@ -54,15 +97,20 @@ def scrape_data(url, keywords):
                   pdf_links.append({"title": title, "pdf_link": pdf_link, "citations": citations}) 
               except Exception as e:
                print(e)
-          
+        logging.info('pdf_links',pdf_links)
         if pdf_links:
-           for item in pdf_links:
-              similarity = machinelearn.getlist(item["pdf_link"], keywords)
-              if similarity != 0:
-                absolute=abs(int(float(similarity)*450)) 
-                if type(similarity)==bool:  
-                   absolute=random.randint(10, 30)
-                lst.append({'title':item["title"],'url':item["pdf_link"],'similarity': absolute,'citations':item["citations"]})
+           for item in pdf_links:              
+              similarity = machinelearn.getlist(item["pdf_link"], keyword_from_user)   
+              if similarity>100:
+                similarity=0
+              logging.info('without formatting ',similarity)
+              absolute=int(similarity*100)
+              lst.append({'title':item["title"],'url':item["pdf_link"],'similarity': absolute,'citations':item["citations"]})
+              # if similarity != 0:
+              #   absolute=abs(int(float(similarity)*500))
+              #   if type(similarity)==bool:  
+              #      absolute=random.randint(10, 35)
+              #   lst.append({'title':item["title"],'url':item["pdf_link"],'similarity': absolute,'citations':item["citations"]})
         
         driver.close() 
         return lst
@@ -72,26 +120,65 @@ def scrape_data(url, keywords):
 
 def RunAutomation(title, keywords): 
     # List of URLs to scrape
-    #op = webdriver.ChromeOptions()
+    global keyword_from_user
+    keyword_from_user= keywords
     op = webdriver.ChromeOptions()
     #add option
     op.add_argument('--headless')
+    op.add_argument('--disable-blink-features=AutomationControlled')
+    op.add_argument('--diable-popup-blocking')
+    op.add_argument('--start-maximized')
+    # disable extensions
+    op.add_argument('--disable-extensions')
     op.add_argument('--no-sandbox')
     op.add_argument("--disable-setuid-sandbox") 
     op.add_argument('--disable-dev-shm-usage')  
     driver = webdriver.Chrome(options=op)
     
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+    
+    user_agents = [
+    # Add your list of user agents here
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
+    ]
+
+    # select random user agent
+    user_agent = random.choice(user_agents)
+
+    # pass in selected user agent as an argument
+    op.add_argument(f'user-agent={user_agent}')
+    
+    # set user agent using execute_cpd_cmd
+    driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": user_agent})
+
+    #enable stealth mode
+    stealth(driver,
+            languages=["en-US", "en"],
+            vendor="Google Inc.",
+            platform="Win32",
+            webgl_vendor="Intel Inc.",
+            renderer="Intel Iris OpenGL Engine",
+            fix_hairline=True,
+           )
+
     try:
-       driver.get('https://scholar.google.com/') 
+       driver.get('https://scholar.google.com/')
        search_box = driver.find_element(By.NAME, "q")
        #search_box.send_keys('selenium webdriver')
+       logging.basicConfig(level=logging.INFO)
        search_box.send_keys(title)
        search_box.submit()
        link=[]
        i=1
        result = []
        start = time.time()
-       while(i<10):
+       while(i<3):
          # Find all the relevant div elements 
          i = i + 1
          link_url=driver.find_element(By.LINK_TEXT,str(i)).get_attribute("href")
@@ -103,16 +190,16 @@ def RunAutomation(title, keywords):
        # Use concurrent.futures.ThreadPoolExecutor for multi-threading
        with concurrent.futures.ThreadPoolExecutor() as executor:
            # Pass the URLs to the executor.map function for parallel processing
-           results = list(executor.map(scrape_data, link, keywords))
+           results = list(executor.map(scrape_data, link))
    
        # Process the results as needed
        for result_list in results:
            for result_dict in result_list:
                result.append(result_dict)
       
-       end = time.time() 
+       end = time.time()
        print(f"Time taken for multithreaded scraper: {end - start} seconds")
-       sorted_data = sorted(result,  key=lambda x: x["similarity"], reverse=True)
+       sorted_data = sorted(result, key=lambda x: x["similarity"], reverse=True)
        return sorted_data
     finally:
         # Close the WebDriver instance to release resources

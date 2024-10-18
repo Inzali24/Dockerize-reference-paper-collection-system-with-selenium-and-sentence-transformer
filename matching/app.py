@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request
 import testMT
 from flask_cors import CORS
+import logging
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:4200"])
@@ -17,9 +18,11 @@ def getThesisList():
     if request.method == 'POST':
         return "False"
     else:
+        logging.basicConfig(level=logging.INFO)
         keywords = request.args.get("keywords")
+        logging.info('app.py keywords', keywords)
         title = request.args.get("title")
-        print(title)
+        print('keywords',keywords)
         data = testMT.RunAutomation(title,keywords)
         return data
 
